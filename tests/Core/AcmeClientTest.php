@@ -107,7 +107,7 @@ class AcmeClientTest extends AbstractFunctionnalTest
         /**
          * Reload order, check if challenge was completed.
          */
-        $updatedOrder = $client->reloadOrder($order->getOrderEndpoint());
+        $updatedOrder = $client->reloadOrder($order);
         $this->assertEquals('ready', $updatedOrder->getStatus());
         $this->assertCount(1, $updatedOrder->getAuthorizationChallenges('acmephp.com'));
         $validatedChallenge = $updatedOrder->getAuthorizationChallenges('acmephp.com')[0];
@@ -125,7 +125,7 @@ class AcmeClientTest extends AbstractFunctionnalTest
          * Reload order, check if certificate was issued
          */
         sleep(1);
-        $response = $client->reloadOrder($response->getOrderEndpoint());
+        $response = $client->reloadOrder($response);
         $this->assertEquals('valid', $response->getStatus());
 
         /**

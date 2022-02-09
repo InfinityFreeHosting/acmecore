@@ -130,9 +130,10 @@ class AcmeClient implements AcmeClientInterface
     /**
      * {@inheritdoc}
      */
-    public function reloadOrder(string $orderEndpoint): CertificateOrder
+    public function reloadOrder(CertificateOrder $order): CertificateOrder
     {
         $client = $this->getHttpClient();
+        $orderEndpoint = $order->getOrderEndpoint();
         $response = $client->request('POST', $orderEndpoint, $client->signKidPayload($orderEndpoint, $this->getResourceAccount(), null));
 
         return $this->createCertificateOrder($response, $orderEndpoint);
