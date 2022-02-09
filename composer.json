@@ -1,9 +1,9 @@
 {
-    "name": "acmephp/core",
+    "name": "infinityfree/acmecore",
     "description": "Raw implementation of the ACME protocol in PHP",
     "type": "library",
     "license": "MIT",
-    "homepage": "https://github.com/acmephp/core",
+    "homepage": "https://github.com/InfinityFreeHosting/acmecore",
     "keywords": [
         "acmephp",
         "letsencrypt",
@@ -24,6 +24,10 @@
         {
             "name": "Jérémy Derussé",
             "homepage": "https://twitter.com/jderusse"
+        },
+        {
+            "name": "InfinityFree",
+            "homepage": "https://infinityfree.net"
         }
     ],
     "require": {
@@ -39,9 +43,28 @@
         "psr/log": "^1.0|^2.0|^3.0",
         "webmozart/assert": "^1.0"
     },
+    "require-dev": {
+        "aws/aws-sdk-php": "^3.38",
+        "league/flysystem": "^1.0.19",
+        "league/flysystem-memory": "^1.0",
+        "phpspec/prophecy": "^1.9",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpunit/phpunit": "^9.0",
+        "symfony/console": "^5.0",
+        "symfony/dependency-injection": "^5.0",
+        "symfony/filesystem": "^5.0",
+        "symfony/finder": "^5.0",
+        "symfony/phpunit-bridge": "^5.0",
+        "symfony/var-dumper": "^5.0"
+    },
     "autoload": {
         "psr-4": {
-            "AcmePhp\\Core\\": "."
+            "InfinityFree\\AcmeCore\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\AcmeCore\\": "tests/"
         }
     },
     "config": {

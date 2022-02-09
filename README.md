@@ -1,33 +1,90 @@
-Acme PHP Core library
-=====================
+# AcmeCore PHP Library
 
-[![Build Status](https://img.shields.io/travis/acmephp/acmephp/master.svg?style=flat-square)](https://travis-ci.org/acmephp/acmephp)
-[![Quality Score](https://img.shields.io/scrutinizer/g/acmephp/acmephp.svg?style=flat-square)](https://scrutinizer-ci.com/g/acmephp/acmephp)
-[![StyleCI](https://styleci.io/repos/59910490/shield)](https://styleci.io/repos/59910490)
-[![Packagist Version](https://img.shields.io/packagist/v/acmephp/acmephp.svg?style=flat-square)](https://packagist.org/packages/acmephp/acmephp)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+AcmeCore is a modified version of the [Acme PHP Core](https://github.com/acmephp/core) library.
 
-Acme PHP Core is the core of the Acme PHP project : it is a basis for the others more
-high-level repositories. It consists of a raw implementation of the Let's Encrypt ACME protocol.
+## When to use AcmeCore
 
-> If you want to chat with us or have questions, ping
-> @tgalopin or @jderusse on the [Symfony Slack](https://symfony.com/support)!
+AcmeCore is designed as a straight forward implementation of the [Let's Encrypt/ACME protocol](https://github.com/letsencrypt/acme-spec) following best practices for libraries. There are no file system dependencies, integrated schedulers or anything like that. You can integrate it in your own project and take care of scheduling and persistence yourself.
 
-## When use Acme PHP Core?
+## Differences with Acme PHP Core
 
-You usually will want to use either [the Acme PHP CLI client](https://github.com/acmephp/cli)
-or [an implementation for your application framework](https://github.com/acmephp).
+Acme PHP Core is a great library, but assumes that the "happy path" always works. I.e. the CA never returns an error, performs all tasks quickly, and always returns the expected data. With Let's Encrypt this is generally true, but other CAs might be less stable.
 
-However, in some cases, you may want to manage SSL certificates directly from your application.
-In these cases, this library will be useful to you.
+The key differences between this library and Acme PHP Core are the following:
 
-Acme PHP Core does nothing more than implementing the [Let's Encrypt/ACME protocol](https://github.com/letsencrypt/acme-spec) :
-the generated SSL keys and certificates are stored in memory and returned to your script. You are the one in charge
-of storing them somewhere persistent.
+- **Every function on `AcmeClient` maps to a single step in the ACME process.** This way, you're free to call and retry the steps at your own pace (e.g. retrying receiving a certificate without calling finalize again).
+- **No more sleep loops.** Schedule tasks the way you want, and don't hog a PHP process if you don't want to.
+- **`CertificateOrder`s now contain the status of the order.** Load the order with the `reloadOrder` function, see the current status of the order and choose the next step to apply.
 
 ## Documentation
 
-Read the official [Acme PHP documentation](https://acmephp.github.io).
+The official [Acme PHP documentation](https://acmephp.github.io) still applies for the most part. But the certificate issuance process has been changed a bit.
+
+```php
+$secureHttpClientFactory = new SecureHttpClientFactory(
+    new GuzzleHttpClient(),
+    new Base64SafeEncoder(),
+    new KeyParser(),
+    new DataSigner(),
+    new ServerErrorHandler()
+);
+
+// $accountKeyPair instance of KeyPair
+$secureHttpClient = $secureHttpClientFactory->createSecureHttpClient($accountKeyPair);
+
+// Important, change to production LE directory for real certs!
+$acmeClient = new AcmeClient($secureHttpClient, 'https://acme-staging-v02.api.letsencrypt.org/directory');
+
+// Request a certificate for mydomain.com.
+$certificateOrder = $acmeClient->requestOrder('mydomain.com');
+
+// Retrieve the challenges to complete for mydomain.com.
+$challenges = $certificateOrder->getAuthorizationChallenges('mydomain.com');
+
+// Now complete the challenge for the domain.
+// Find the challenge object for the verification type you want to do, e.g. http-01, dns-01.
+$challenge = $challenges[0];
+
+// Ask the CA to confirm the authorization.
+$challenge = $acmeClient->challengeAuthorization($dnsChallenge);
+
+// Wait for the CA to complete the authorization.
+// This example uses a sleep loop, but you can schedule your own.
+while ($challenge->getStatus() != 'ready') {
+    sleep(1);
+    
+    $challenge = $acmeClient->reloadAuthorization($challenge);
+}
+
+// Prepare the CSR
+$dn = new DistinguishedName('mydomain.com');
+$keyPairGenerator = new KeyPairGenerator();
+// Make a new key pair. We'll keep the private key as our cert key
+$domainKeyPair = $keyPairGenerator->generateKeyPair();
+
+// This is the private key
+echo $domainKeyPair->getPrivateKey()->getPem());
+
+// Generate CSR
+$csr = new CertificateRequest($dn, $domainKeyPair);
+
+// Tell the CA to generate the certificate.
+$certificateOrder = $acmeClient->finalizeOrder($certificateOrder, $csr);
+
+// Wait for the CA to complete the issuance.
+// This example uses a sleep loop, but you can schedule your own.
+while ($certificateOrder->getStatus() != 'issued') {
+    sleep(1);
+    
+    $certificateOrder = $acmeClient->reloadOrder($certificateOrder->getOrderEndpoint());
+}
+
+// Retrieve the generated certificate.
+$certificate = $acmeClient->retrieveCertificate($certificateOrder);
+
+// This is the generated certificate.
+echo $certificate->getPem();
+```
 
 ## Launch the Test suite
 
