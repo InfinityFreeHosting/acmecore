@@ -72,10 +72,10 @@ interface AcmeClientInterface
      * Retrieve the information of a certificate order given the order endpoint of an order that was created before.
      * This way, you can see the current status of the order and the challenges to determine the next step to take.
      *
-     * @param string $orderEndpoint the order URL of the certificate order.
+     * @param CertificateOrder $order a CertificateOrder object containing an orderEndpoint.
      * @return CertificateOrder the Order returned by the Certificate Authority
      */
-    public function reloadOrder(string $orderEndpoint): CertificateOrder;
+    public function reloadOrder(CertificateOrder $order): CertificateOrder;
 
     /**
      * Request a certificate for the given domain.
