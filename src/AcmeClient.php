@@ -297,7 +297,7 @@ class AcmeClient implements AcmeClientInterface
             }
         }
 
-        return new CertificateOrder($authorizationsChallenges, $orderEndpoint, $response['status']);
+        return new CertificateOrder($authorizationsChallenges, $orderEndpoint, $response['status'], $response['error']);
     }
 
     private function createCertificateResponse(string $certificate): Certificate

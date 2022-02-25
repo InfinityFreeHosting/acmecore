@@ -27,7 +27,10 @@ class CertificateOrder
     /** @var string */
     private $status;
 
-    public function __construct(array $authorizationsChallenges, string $orderEndpoint = null, string $status = null)
+    /** @var array */
+    private $error;
+
+    public function __construct(array $authorizationsChallenges, string $orderEndpoint = null, string $status = null, array $error = [])
     {
         foreach ($authorizationsChallenges as &$authorizationChallenges) {
             foreach ($authorizationChallenges as &$authorizationChallenge) {
@@ -40,6 +43,7 @@ class CertificateOrder
         $this->authorizationsChallenges = $authorizationsChallenges;
         $this->orderEndpoint = $orderEndpoint;
         $this->status = $status;
+        $this->error = $error;
     }
 
     public function toArray(): array
@@ -52,6 +56,7 @@ class CertificateOrder
             }, $this->getAuthorizationsChallenges()),
             'orderEndpoint' => $this->getOrderEndpoint(),
             'status' => $this->getStatus(),
+            'error' => $this->getError(),
         ];
     }
 
@@ -88,5 +93,25 @@ class CertificateOrder
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function getError(): array
+    {
+        return $this->error;
+    }
+
+    public function getErrorType(): string
+    {
+        return $this->error['type'] ?? '';
+    }
+
+    public function getErrorDetail(): string
+    {
+        return $this->error['detail'] ?? '';
+    }
+
+    public function getErrorStatus(): int
+    {
+        return $this->error['status'] ?? 0;
     }
 }
