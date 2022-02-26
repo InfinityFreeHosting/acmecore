@@ -222,7 +222,7 @@ class SecureHttpClient
      * @throws ExpectedJsonException   when $returnJson = true and the response is not valid JSON
      * @throws AcmeCoreServerException when the ACME server returns an error HTTP status code
      */
-    public function rawRequest(string $method, string $endpoint, array $data = []): ResponseInterface
+    public function rawRequest(string $method, string $endpoint, array $data = [], string $acceptsContentType = 'application/json,application/jose+json,'): ResponseInterface
     {
         $call = function () use ($method, $endpoint, $data) {
             $request = $this->createRequest($method, $endpoint, $data);
@@ -324,10 +324,10 @@ class SecureHttpClient
         ];
     }
 
-    private function createRequest($method, $endpoint, $data)
+    private function createRequest($method, $endpoint, $data, $acceptsContentType = 'application/json,application/jose+json,')
     {
         $request = new Request($method, $endpoint);
-        $request = $request->withHeader('Accept', 'application/json,application/jose+json,');
+        $request = $request->withHeader('Accept', $acceptsContentType);
 
         if ('POST' === $method && \is_array($data)) {
             $request = $request->withHeader('Content-Type', 'application/jose+json');

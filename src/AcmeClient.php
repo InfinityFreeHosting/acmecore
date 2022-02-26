@@ -170,7 +170,13 @@ class AcmeClient implements AcmeClientInterface
             throw new CertificateRequestFailedException('The order has not been validated');
         }
 
-        $response = $client->rawRequest('POST', $response['certificate'], $client->signKidPayload($response['certificate'], $this->getResourceAccount(), null));
+        $response = $client->rawRequest(
+            'POST',
+            $response['certificate'],
+            $client->signKidPayload($response['certificate'], $this->getResourceAccount(), null),
+            'application/pem-certificate-chain'
+        );
+
         $responseHeaders = $response->getHeaders();
 
         if ($returnAlternateCertificateIfAvailable && isset($responseHeaders['Link'][1])) {
