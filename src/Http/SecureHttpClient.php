@@ -224,8 +224,8 @@ class SecureHttpClient
      */
     public function rawRequest(string $method, string $endpoint, array $data = [], string $acceptsContentType = 'application/json,application/jose+json,'): ResponseInterface
     {
-        $call = function () use ($method, $endpoint, $data) {
-            $request = $this->createRequest($method, $endpoint, $data);
+        $call = function () use ($method, $endpoint, $data, $acceptsContentType) {
+            $request = $this->createRequest($method, $endpoint, $data, $acceptsContentType);
             try {
                 $this->lastResponse = $this->httpClient->send($request);
             } catch (\Exception $exception) {
