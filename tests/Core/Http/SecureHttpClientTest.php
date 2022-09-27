@@ -11,6 +11,7 @@
 
 namespace Tests\AcmeCore\Core\Http;
 
+use GuzzleHttp\Psr7\Utils;
 use InfinityFree\AcmeCore\Exception\AcmeCoreException;
 use InfinityFree\AcmeCore\Http\Base64SafeEncoder;
 use InfinityFree\AcmeCore\Http\SecureHttpClient;
@@ -177,7 +178,7 @@ class SecureHttpClientTest extends TestCase
         $this->assertEquals('POST', $request->getMethod());
         $this->assertEquals('/acme/new-reg', ($request->getUri() instanceof Uri) ? $request->getUri()->getPath() : $request->getUri());
 
-        $body = \GuzzleHttp\Psr7\copy_to_string($request->getBody());
+        $body = Utils::copyToString($request->getBody());
         $payload = @json_decode($body, true);
 
         $this->assertIsArray($payload);
