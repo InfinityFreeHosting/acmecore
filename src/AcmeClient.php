@@ -65,7 +65,7 @@ class AcmeClient implements AcmeClientInterface
      */
     private $account;
 
-    public function __construct(SecureHttpClient $httpClient, string $directoryUrl, CertificateRequestSigner $csrSigner = null)
+    public function __construct(SecureHttpClient $httpClient, string $directoryUrl, ?CertificateRequestSigner $csrSigner = null)
     {
         $this->uninitializedHttpClient = $httpClient;
         $this->directoryUrl = $directoryUrl;
@@ -75,7 +75,7 @@ class AcmeClient implements AcmeClientInterface
     /**
      * {@inheritdoc}
      */
-    public function registerAccount(string $email = null, ExternalAccount $externalAccount = null): array
+    public function registerAccount(?string $email = null, ?ExternalAccount $externalAccount = null): array
     {
         $client = $this->getHttpClient();
 
@@ -214,7 +214,7 @@ class AcmeClient implements AcmeClientInterface
     /**
      * {@inheritdoc}
      */
-    public function revokeCertificate(Certificate $certificate, RevocationReason $revocationReason = null)
+    public function revokeCertificate(Certificate $certificate, ?RevocationReason $revocationReason = null)
     {
         if (!$endpoint = $this->getResourceUrl(ResourcesDirectory::REVOKE_CERT)) {
             throw new CertificateRevocationException('This ACME server does not support certificate revocation.');

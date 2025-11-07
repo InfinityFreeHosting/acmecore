@@ -33,7 +33,7 @@ class DnsValidator implements ValidatorInterface
      */
     private $dnsResolver;
 
-    public function __construct(DnsDataExtractor $extractor = null, DnsResolverInterface $dnsResolver = null)
+    public function __construct(?DnsDataExtractor $extractor = null, ?DnsResolverInterface $dnsResolver = null)
     {
         $this->extractor = $extractor ?: new DnsDataExtractor();
 

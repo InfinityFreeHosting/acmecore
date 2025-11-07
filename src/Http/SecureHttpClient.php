@@ -294,7 +294,7 @@ class SecureHttpClient
     /**
      * Sign the given Payload.
      */
-    private function signPayload(array $protected, array $payload = null): array
+    private function signPayload(array $protected, ?array $payload = null): array
     {
         if (!isset($protected['alg'])) {
             throw new \InvalidArgumentException('The property "alg" is required in the protected array');
