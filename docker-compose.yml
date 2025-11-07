@@ -1,0 +1,47 @@
+services:
+  # SFTP server for testing
+  sftp:
+    image: atmoz/sftp
+    ports:
+      - "8022:22"
+    command: acmephp:acmephp:::share
+
+  # Pebble challenge test server
+  challenge_server:
+    image: ghcr.io/letsencrypt/pebble-challtestsrv
+    container_name: acme_server
+    network_mode: host
+
+  # Pebble ACME server
+  pebble:
+    image: ghcr.io/letsencrypt/pebble:latest
+    container_name: acme_pebble
+    network_mode: host
+    depends_on:
+      - challenge_server
+    environment:
+      - PEBBLE_VA_NOSLEEP=1
+      - PEBBLE_WFE_NONCEREJECT=0
+      - PEBBLE_ALTERNATE_ROOTS=1
+    volumes:
+      - ./tests/Fixtures/pebble-config-${PEBBLE_MODE:-default}.json:/test/config/pebble-config.json
+    command: -dnsserver 127.0.0.1:8053
+
+  # Wait for all services to be ready
+  wait:
+    image: martin/wait
+    network_mode: host
+    command: -c localhost:14000,localhost:8022,localhost:8053,localhost:5002 -t 120
+
+  # PHP test runner
+  phpunit:
+    image: php:8.4-cli
+    container_name: acme_phpunit
+    working_dir: /app
+    network_mode: host
+    environment:
+      - ACME_DIRECTORY_URL=https://localhost:14000/dir
+      - CHALLENGE_SERVER_HOST=localhost
+    volumes:
+      - ./:/app
+    command: tail -f /dev/null  # Keep container running

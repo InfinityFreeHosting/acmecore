@@ -12,16 +12,16 @@
 namespace InfinityFree\AcmeCore\Filesystem\Adapter;
 
 use InfinityFree\AcmeCore\Filesystem\FilesystemInterface;
-use League\Flysystem\FilesystemInterface as FlysystemFilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 
 class FlysystemAdapter implements FilesystemInterface
 {
     /**
-     * @var FlysystemFilesystemInterface
+     * @var FilesystemOperator
      */
     private $filesystem;
 
-    public function __construct(FlysystemFilesystemInterface $filesystem)
+    public function __construct(FilesystemOperator $filesystem)
     {
         $this->filesystem = $filesystem;
     }

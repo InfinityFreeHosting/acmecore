@@ -36,7 +36,7 @@ class Base64SafeEncoderTest extends TestCase
     /**
      * @see https://tools.ietf.org/html/rfc4648#section-10
      */
-    public function getTestVectors()
+    public static function getTestVectors()
     {
         return [
             [
@@ -84,7 +84,7 @@ class Base64SafeEncoderTest extends TestCase
         $this->assertEquals("\00", $decoded);
     }
 
-    public function getTestBadVectors()
+    public static function getTestBadVectors()
     {
         return [
             [
