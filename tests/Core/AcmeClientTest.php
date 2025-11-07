@@ -11,6 +11,7 @@
 
 namespace Tests\AcmeCore\Core;
 
+use GuzzleHttp\RequestOptions;
 use InfinityFree\AcmeCore\AcmeClient;
 use InfinityFree\AcmeCore\Challenge\Http\SimpleHttpSolver;
 use InfinityFree\AcmeCore\Exception\Protocol\CertificateRevocationException;
@@ -22,7 +23,6 @@ use InfinityFree\AcmeCore\Protocol\CertificateOrder;
 use InfinityFree\AcmeCore\Protocol\ExternalAccount;
 use AcmePhp\Ssl\Certificate;
 use AcmePhp\Ssl\CertificateRequest;
-use AcmePhp\Ssl\CertificateResponse;
 use AcmePhp\Ssl\DistinguishedName;
 use AcmePhp\Ssl\Generator\EcKey\EcKeyOption;
 use AcmePhp\Ssl\Generator\KeyOption;
@@ -31,10 +31,11 @@ use AcmePhp\Ssl\Generator\RsaKey\RsaKeyOption;
 use AcmePhp\Ssl\Parser\KeyParser;
 use AcmePhp\Ssl\Signer\DataSigner;
 use GuzzleHttp\Client;
+use PHPUnit\Framework\TestCase;
 
-class AcmeClientTest extends AbstractFunctionnalTest
+class AcmeClientTest extends TestCase
 {
-    public function provideFullProcess()
+    public static function provideFullProcess()
     {
         yield 'rsa1024' => [new RsaKeyOption(1024), false];
         yield 'rsa1024-alternate' => [new RsaKeyOption(1024), true];
@@ -57,7 +58,7 @@ class AcmeClientTest extends AbstractFunctionnalTest
             new ServerErrorHandler()
         );
 
-        $client = new AcmeClient($secureHttpClient, 'https://localhost:14000/dir');
+        $client = new AcmeClient($secureHttpClient, getenv('ACME_DIRECTORY_URL') ?: 'https://localhost:14000/dir');
 
         /*
          * Register account
@@ -87,7 +88,9 @@ class AcmeClientTest extends AbstractFunctionnalTest
 
         $this->assertInstanceOf(AuthorizationChallenge::class, $challenge);
         $this->assertEquals('acmephp.com', $challenge->getDomain());
-        $this->assertStringContainsString('https://localhost:14000/chalZ/', $challenge->getUrl());
+        // Extract host from ACME_DIRECTORY_URL or default to localhost
+        $acmeHost = parse_url(getenv('ACME_DIRECTORY_URL') ?: 'https://localhost:14000/dir', PHP_URL_HOST);
+        $this->assertStringContainsString('https://' . $acmeHost . ':14000/chalZ/', $challenge->getUrl());
 
         $solver->solve($challenge);
 
@@ -144,5 +147,23 @@ class AcmeClientTest extends AbstractFunctionnalTest
         } catch (CertificateRevocationException $e) {
             $this->assertStringContainsString('Unable to find specified certificate', $e->getPrevious()->getPrevious()->getMessage());
         }
+    }
+
+    protected function handleChallenge($token, $payload)
+    {
+        $fakeServer = new Client();
+        $challengeHost = getenv('CHALLENGE_SERVER_HOST') ?: 'localhost';
+        $response = $fakeServer->post('http://' . $challengeHost . ':8055/add-http01', [RequestOptions::JSON => ['token' => $token, 'content' => $payload]]);
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    protected function cleanChallenge($token)
+    {
+        $fakeServer = new Client();
+        $challengeHost = getenv('CHALLENGE_SERVER_HOST') ?: 'localhost';
+        $response = $fakeServer->post('http://' . $challengeHost . ':8055/del-http01', [RequestOptions::JSON => ['token' => $token]]);
+
+        $this->assertSame(200, $response->getStatusCode());
     }
 }

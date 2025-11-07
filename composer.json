@@ -27,11 +27,11 @@
         },
         {
             "name": "InfinityFree",
-            "homepage": "https://infinityfree.net"
+            "homepage": "https://www.infinityfree.com"
         }
     ],
     "require": {
-        "php": ">=7.2.5",
+        "php": ">=7.3.0",
         "ext-hash": "*",
         "ext-json": "*",
         "ext-openssl": "*",
@@ -45,17 +45,17 @@
     },
     "require-dev": {
         "aws/aws-sdk-php": "^3.38",
-        "league/flysystem": "^1.0.19",
-        "league/flysystem-memory": "^1.0",
+        "league/flysystem": "^1.0.19|^2.0|^3.0",
+        "league/flysystem-memory": "^1.0|^2.0|^3.0",
         "phpspec/prophecy": "^1.9",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "^9.0",
-        "symfony/console": "^5.0",
-        "symfony/dependency-injection": "^5.0",
-        "symfony/filesystem": "^5.0",
-        "symfony/finder": "^5.0",
-        "symfony/phpunit-bridge": "^5.0",
-        "symfony/var-dumper": "^5.0"
+        "phpunit/phpunit": "^9.0|^10.0",
+        "symfony/console": "^5.0|^6.0|^7.0",
+        "symfony/dependency-injection": "^5.0|^6.0|^7.0",
+        "symfony/filesystem": "^5.0|^6.0|^7.0",
+        "symfony/finder": "^5.0|^6.0|^7.0",
+        "symfony/phpunit-bridge": "^5.0|^6.0|^7.0",
+        "symfony/var-dumper": "^5.0|^6.0|^7.0"
     },
     "autoload": {
         "psr-4": {

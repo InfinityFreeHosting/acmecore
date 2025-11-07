@@ -38,7 +38,7 @@ use PHPUnit\Framework\TestCase;
 
 class ServerErrorHandlerTest extends TestCase
 {
-    public function getErrorTypes()
+    public static function getErrorTypes()
     {
         return [
             ['badCSR', BadCsrServerException::class],
