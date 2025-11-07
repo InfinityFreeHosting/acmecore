@@ -1,0 +1,29 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Start test services
+        run: ./tests/setup.sh
+
+      - name: Install Composer dependencies
+        run: docker compose exec -T phpunit composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run tests
+        run: ./tests/run.sh
+
+      - name: Teardown test services
+        if: always()
+        run: ./tests/teardown.sh
