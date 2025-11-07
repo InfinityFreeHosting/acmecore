@@ -43,7 +43,7 @@ class Route53Solver implements MultipleChallengesSolverInterface
      */
     private $cacheZones;
 
-    public function __construct(DnsDataExtractor $extractor = null, Route53Client $client = null)
+    public function __construct(?DnsDataExtractor $extractor = null, ?Route53Client $client = null)
     {
         $this->extractor = $extractor ?: new DnsDataExtractor();
         $this->client = $client ?: new Route53Client([]);

@@ -43,7 +43,7 @@ class FilesystemSolver implements SolverInterface, ConfigurableServiceInterface
      */
     private $extractor;
 
-    public function __construct(ContainerInterface $filesystemFactoryLocator = null, HttpDataExtractor $extractor = null)
+    public function __construct(?ContainerInterface $filesystemFactoryLocator = null, ?HttpDataExtractor $extractor = null)
     {
         $this->filesystemFactoryLocator = $filesystemFactoryLocator ?: new ServiceLocator([]);
         $this->extractor = $extractor ?: new HttpDataExtractor();

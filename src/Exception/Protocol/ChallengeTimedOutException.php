@@ -18,7 +18,7 @@ class ChallengeTimedOutException extends ProtocolException
 {
     private $response;
 
-    public function __construct($response, \Exception $previous = null)
+    public function __construct($response, ?\Exception $previous = null)
     {
         parent::__construct(
             sprintf('Challenge timed out (response: %s).', json_encode($response)),
@@ -31,7 +31,7 @@ class ChallengeTimedOutException extends ProtocolException
     /**
      * @return array
      */
-    public function getResponse()
+    public function getResponse(): array
     {
         return $this->response;
     }

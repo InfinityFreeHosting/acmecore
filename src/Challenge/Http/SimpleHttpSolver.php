@@ -33,7 +33,7 @@ class SimpleHttpSolver implements SolverInterface
      */
     private $output;
 
-    public function __construct(HttpDataExtractor $extractor = null, OutputInterface $output = null)
+    public function __construct(?HttpDataExtractor $extractor = null, ?OutputInterface $output = null)
     {
         $this->extractor = $extractor ?: new HttpDataExtractor();
         $this->output = $output ?: new NullOutput();

@@ -49,7 +49,7 @@ class GandiSolver implements MultipleChallengesSolverInterface, ConfigurableServ
      */
     private $apiKey;
 
-    public function __construct(DnsDataExtractor $extractor = null, ClientInterface $client = null)
+    public function __construct(?DnsDataExtractor $extractor = null, ?ClientInterface $client = null)
     {
         $this->extractor = $extractor ?: new DnsDataExtractor();
         $this->client = $client ?: new Client();
