@@ -19,7 +19,7 @@ namespace InfinityFree\AcmeCore\Challenge\Dns;
 interface DnsResolverInterface
 {
     /**
-     * Return whether the Resolver is supported.
+     * Return whether or not the Resolver is supported.
      */
     public static function isSupported(): bool;
 

@@ -37,16 +37,16 @@ interface AcmeClientInterface
     /**
      * Register the local account KeyPair in the Certificate Authority.
      *
-     * @param string|null          $email           an optional e-mail to associate with the account
-     * @param ExternalAccount|null $externalAccount an optional External Account to use for External Account Binding
+     * @param string|null          $email           an optionnal e-mail to associate with the account
+     * @param ExternalAccount|null $externalAccount an optionnal External Account to use for External Account Binding
      *
      * @throws AcmeCoreServerException when the ACME server returns an error HTTP status code
      *                                 (the exception will be more specific if detail is provided)
-     * @throws AcmeCoreClientException when an error occurred during response parsing
+     * @throws AcmeCoreClientException when an error occured during response parsing
      *
      * @return array the Certificate Authority response decoded from JSON into an array
      */
-    public function registerAccount(?string $email = null, ?ExternalAccount $externalAccount = null): array;
+    public function registerAccount(string $email = null, ExternalAccount $externalAccount = null): array;
 
     /**
      * Request authorization challenge data for a list of domains.
@@ -60,7 +60,7 @@ interface AcmeClientInterface
      * @throws AcmeCoreServerException        when the ACME server returns an error HTTP status code
      *                                        (the exception will be more specific if detail is provided)
      * @throws AcmeCoreClientException        when an error occured during response parsing
-     * @throws ChallengeNotSupportedException when the server does not support the HTTP challenge
+     * @throws ChallengeNotSupportedException when the HTTP challenge is not supported by the server
      *
      * @return CertificateOrder the Order returned by the Certificate Authority
      */
@@ -143,5 +143,5 @@ interface AcmeClientInterface
      *
      * @throws CertificateRevocationException
      */
-    public function revokeCertificate(Certificate $certificate, ?RevocationReason $revocationReason = null);
+    public function revokeCertificate(Certificate $certificate, RevocationReason $revocationReason = null);
 }

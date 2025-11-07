@@ -23,7 +23,6 @@ use InfinityFree\AcmeCore\Protocol\CertificateOrder;
 use InfinityFree\AcmeCore\Protocol\ExternalAccount;
 use AcmePhp\Ssl\Certificate;
 use AcmePhp\Ssl\CertificateRequest;
-use AcmePhp\Ssl\CertificateResponse;
 use AcmePhp\Ssl\DistinguishedName;
 use AcmePhp\Ssl\Generator\EcKey\EcKeyOption;
 use AcmePhp\Ssl\Generator\KeyOption;
