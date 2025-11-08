@@ -43,18 +43,11 @@
         "webmozart/assert": "^1.0"
     },
     "require-dev": {
-        "aws/aws-sdk-php": "^3.38",
-        "league/flysystem": "^1.0.19|^2.0|^3.0",
-        "league/flysystem-memory": "^1.0|^2.0|^3.0",
+        "friendsofphp/php-cs-fixer": "^3.5",
+        "phpstan/phpstan": "^1.11",
         "phpspec/prophecy": "^1.9",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "^9.0|^10.0",
-        "symfony/console": "^5.0|^6.0|^7.0",
-        "symfony/dependency-injection": "^5.0|^6.0|^7.0",
-        "symfony/filesystem": "^5.0|^6.0|^7.0",
-        "symfony/finder": "^5.0|^6.0|^7.0",
-        "symfony/phpunit-bridge": "^5.0|^6.0|^7.0",
-        "symfony/var-dumper": "^5.0|^6.0|^7.0"
+        "phpunit/phpunit": "^9.0|^10.0|^11.0"
     },
     "autoload": {
         "psr-4": {

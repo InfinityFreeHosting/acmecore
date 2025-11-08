@@ -52,7 +52,7 @@ $challenge = $acmeClient->challengeAuthorization($dnsChallenge);
 // This example uses a sleep loop, but you can schedule your own.
 while ($challenge->getStatus() != 'ready') {
     sleep(1);
-    
+
     $challenge = $acmeClient->reloadAuthorization($challenge);
 }
 
@@ -75,7 +75,7 @@ $certificateOrder = $acmeClient->finalizeOrder($certificateOrder, $csr);
 // This example uses a sleep loop, but you can schedule your own.
 while ($certificateOrder->getStatus() != 'issued') {
     sleep(1);
-    
+
     $certificateOrder = $acmeClient->reloadOrder($certificateOrder->getOrderEndpoint());
 }
 

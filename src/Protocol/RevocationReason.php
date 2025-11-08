@@ -42,7 +42,7 @@ class RevocationReason
 
     public static function createDefaultReason(): self
     {
-        return new static(self::DEFAULT_REASON);
+        return new self(self::DEFAULT_REASON);
     }
 
     public static function getFormattedReasons(): array
