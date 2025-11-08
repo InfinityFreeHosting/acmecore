@@ -1,0 +1,111 @@
+<?php
+
+/*
+ * This file is part of the Acme PHP project.
+ *
+ * (c) Titouan Galopin <galopintitouan@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Tests\AcmeCore\Ssl\Signer;
+
+use InfinityFree\AcmeCore\Ssl\CertificateRequest;
+use InfinityFree\AcmeCore\Ssl\DistinguishedName;
+use InfinityFree\AcmeCore\Ssl\Generator\KeyPairGenerator;
+use InfinityFree\AcmeCore\Ssl\Generator\RsaKey\RsaKeyOption;
+use InfinityFree\AcmeCore\Ssl\Signer\CertificateRequestSigner;
+use PHPUnit\Framework\TestCase;
+
+class CertificateRequestSignerTest extends TestCase
+{
+    /** @var CertificateRequestSigner */
+    private $service;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->service = new CertificateRequestSigner();
+    }
+
+    public function testSignCertificateRequestReturnsACertificate()
+    {
+        $dummyDistinguishedName = new DistinguishedName(
+            'acmephp.com',
+            'FR', 'france', 'Paris', 'acme', 'IT', 'qa@acmephp.com', []
+        );
+        $dummyKeyPair = (new KeyPairGenerator())->generateKeyPair(new RsaKeyOption(1024));
+
+        $result = $this->service->signCertificateRequest(
+            new CertificateRequest($dummyDistinguishedName, $dummyKeyPair)
+        );
+        $this->assertIsString($result);
+        $this->assertStringContainsString('-----BEGIN CERTIFICATE REQUEST-----', $result);
+
+        $csrResult = openssl_csr_get_subject($result, false);
+        $this->assertSame(
+            [
+                'countryName' => 'FR',
+                'stateOrProvinceName' => 'france',
+                'localityName' => 'Paris',
+                'organizationName' => 'acme',
+                'organizationalUnitName' => 'IT',
+                'commonName' => 'acmephp.com',
+                'emailAddress' => 'qa@acmephp.com',
+            ],
+            $csrResult
+        );
+    }
+
+    public function testSignCertificateRequestUseDefaultValues()
+    {
+        $dummyDistinguishedName = new DistinguishedName(
+            'acmephp.com'
+        );
+        $dummyKeyPair = (new KeyPairGenerator())->generateKeyPair(new RsaKeyOption(1024));
+
+        $result = $this->service->signCertificateRequest(
+            new CertificateRequest($dummyDistinguishedName, $dummyKeyPair)
+        );
+        $this->assertIsString($result);
+        $this->assertStringContainsString('-----BEGIN CERTIFICATE REQUEST-----', $result);
+        $csrResult = openssl_csr_get_subject($result, false);
+        $this->assertSame(
+            [
+                'commonName' => 'acmephp.com',
+            ],
+            $csrResult
+        );
+    }
+
+    public function testSignCertificateRequestWithSubjectAlternativeNames()
+    {
+        $dummyDistinguishedName = new DistinguishedName(
+            'acmephp.com',
+            'FR', 'france', 'Paris', 'acme', 'IT', 'qa@acmephp.com', ['www.acmephp.com']
+        );
+        $dummyKeyPair = (new KeyPairGenerator())->generateKeyPair(new RsaKeyOption(1024));
+
+        $result = $this->service->signCertificateRequest(
+            new CertificateRequest($dummyDistinguishedName, $dummyKeyPair)
+        );
+        $this->assertIsString($result);
+        $this->assertStringContainsString('-----BEGIN CERTIFICATE REQUEST-----', $result);
+
+        $csrResult = openssl_csr_get_subject($result, false);
+        $this->assertSame(
+            [
+                'countryName' => 'FR',
+                'stateOrProvinceName' => 'france',
+                'localityName' => 'Paris',
+                'organizationName' => 'acme',
+                'organizationalUnitName' => 'IT',
+                'commonName' => 'acmephp.com',
+                'emailAddress' => 'qa@acmephp.com',
+            ],
+            $csrResult
+        );
+    }
+}

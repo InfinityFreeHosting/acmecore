@@ -9,17 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace InfinityFree\AcmeCore\Challenge;
+namespace InfinityFree\AcmeCore\Ssl\Exception;
 
 /**
- * ACME challenge solver.
- *
  * @author Jérémy Derussé <jeremy@derusse.com>
  */
-interface ConfigurableServiceInterface
+class KeyPairGenerationException extends KeyGenerationException
 {
-    /**
-     * Configure the service with a set of configuration.
-     */
-    public function configure(array $config);
 }

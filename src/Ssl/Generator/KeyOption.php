@@ -9,12 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace InfinityFree\AcmeCore\Filesystem;
+namespace InfinityFree\AcmeCore\Ssl\Generator;
 
-interface FilesystemFactoryInterface
+interface KeyOption
 {
-    /**
-     * Create a new Filesystem.
-     */
-    public function create(array $config): FilesystemInterface;
 }
