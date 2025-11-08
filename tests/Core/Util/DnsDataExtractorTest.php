@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmeCore\Core\Challenge\Extractor;
+namespace Tests\AcmeCore\Core\Util;
 
-use InfinityFree\AcmeCore\Challenge\Extractor\DnsDataExtractor;
 use InfinityFree\AcmeCore\Http\Base64SafeEncoder;
 use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
+use InfinityFree\AcmeCore\Util\DnsDataExtractor;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
