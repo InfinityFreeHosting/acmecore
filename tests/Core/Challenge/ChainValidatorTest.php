@@ -12,7 +12,6 @@
 namespace Tests\AcmeCore\Core\Challenge;
 
 use InfinityFree\AcmeCore\Challenge\ChainValidator;
-use InfinityFree\AcmeCore\Challenge\SolverInterface;
 use InfinityFree\AcmeCore\Challenge\ValidatorInterface;
 use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 use PHPUnit\Framework\TestCase;
@@ -27,17 +26,16 @@ class ChainValidatorTest extends TestCase
         $mockValidator1 = $this->prophesize(ValidatorInterface::class);
         $mockValidator2 = $this->prophesize(ValidatorInterface::class);
         $dummyChallenge = $this->prophesize(AuthorizationChallenge::class)->reveal();
-        $solver = $this->prophesize(SolverInterface::class)->reveal();
 
         $validator = new ChainValidator([$mockValidator1->reveal(), $mockValidator2->reveal()]);
 
-        $mockValidator1->supports($dummyChallenge, $solver)->willReturn(false);
-        $mockValidator2->supports($dummyChallenge, $solver)->willReturn(true);
-        $this->assertTrue($validator->supports($dummyChallenge, $solver));
+        $mockValidator1->supports($dummyChallenge)->willReturn(false);
+        $mockValidator2->supports($dummyChallenge)->willReturn(true);
+        $this->assertTrue($validator->supports($dummyChallenge));
 
-        $mockValidator1->supports($dummyChallenge, $solver)->willReturn(false);
-        $mockValidator2->supports($dummyChallenge, $solver)->willReturn(false);
-        $this->assertFalse($validator->supports($dummyChallenge, $solver));
+        $mockValidator1->supports($dummyChallenge)->willReturn(false);
+        $mockValidator2->supports($dummyChallenge)->willReturn(false);
+        $this->assertFalse($validator->supports($dummyChallenge));
     }
 
     public function testIsValid()
@@ -45,15 +43,14 @@ class ChainValidatorTest extends TestCase
         $mockValidator1 = $this->prophesize(ValidatorInterface::class);
         $mockValidator2 = $this->prophesize(ValidatorInterface::class);
         $dummyChallenge = $this->prophesize(AuthorizationChallenge::class)->reveal();
-        $solver = $this->prophesize(SolverInterface::class)->reveal();
 
         $validator = new ChainValidator([$mockValidator1->reveal(), $mockValidator2->reveal()]);
 
-        $mockValidator1->supports($dummyChallenge, $solver)->willReturn(false);
-        $mockValidator1->isValid($dummyChallenge, $solver)->shouldNotBeCalled();
-        $mockValidator2->supports($dummyChallenge, $solver)->willReturn(true);
-        $mockValidator2->isValid($dummyChallenge, $solver)->willReturn(true);
+        $mockValidator1->supports($dummyChallenge)->willReturn(false);
+        $mockValidator1->isValid($dummyChallenge)->shouldNotBeCalled();
+        $mockValidator2->supports($dummyChallenge)->willReturn(true);
+        $mockValidator2->isValid($dummyChallenge)->willReturn(true);
 
-        $this->assertTrue($validator->isValid($dummyChallenge, $solver));
+        $this->assertTrue($validator->isValid($dummyChallenge));
     }
 }

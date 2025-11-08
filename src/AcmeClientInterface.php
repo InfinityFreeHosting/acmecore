@@ -23,9 +23,9 @@ use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 use InfinityFree\AcmeCore\Protocol\CertificateOrder;
 use InfinityFree\AcmeCore\Protocol\ExternalAccount;
 use InfinityFree\AcmeCore\Protocol\RevocationReason;
-use AcmePhp\Ssl\Certificate;
-use AcmePhp\Ssl\CertificateRequest;
-use AcmePhp\Ssl\CertificateResponse;
+use InfinityFree\AcmeCore\Ssl\Certificate;
+use InfinityFree\AcmeCore\Ssl\CertificateRequest;
+use InfinityFree\AcmeCore\Ssl\CertificateResponse;
 
 /**
  * ACME protocol client interface.

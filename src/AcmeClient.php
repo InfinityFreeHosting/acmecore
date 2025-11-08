@@ -22,9 +22,9 @@ use InfinityFree\AcmeCore\Protocol\CertificateOrder;
 use InfinityFree\AcmeCore\Protocol\ExternalAccount;
 use InfinityFree\AcmeCore\Protocol\ResourcesDirectory;
 use InfinityFree\AcmeCore\Protocol\RevocationReason;
-use AcmePhp\Ssl\Certificate;
-use AcmePhp\Ssl\CertificateRequest;
-use AcmePhp\Ssl\Signer\CertificateRequestSigner;
+use InfinityFree\AcmeCore\Ssl\Certificate;
+use InfinityFree\AcmeCore\Ssl\CertificateRequest;
+use InfinityFree\AcmeCore\Ssl\Signer\CertificateRequestSigner;
 use GuzzleHttp\Psr7\Utils;
 use Webmozart\Assert\Assert;
 

@@ -1,11 +1,4 @@
 services:
-  # SFTP server for testing
-  sftp:
-    image: atmoz/sftp
-    ports:
-      - "8022:22"
-    command: acmephp:acmephp:::share
-
   # Pebble challenge test server
   challenge_server:
     image: ghcr.io/letsencrypt/pebble-challtestsrv
@@ -31,7 +24,7 @@ services:
   wait:
     image: martin/wait
     network_mode: host
-    command: -c localhost:14000,localhost:8022,localhost:8053,localhost:5002 -t 120
+    command: -c localhost:14000,localhost:8053,localhost:5002 -t 120
 
   # PHP test runner
   phpunit:

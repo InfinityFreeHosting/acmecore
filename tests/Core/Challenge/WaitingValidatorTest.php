@@ -11,7 +11,6 @@
 
 namespace Tests\AcmeCore\Core\Challenge;
 
-use InfinityFree\AcmeCore\Challenge\SolverInterface;
 use InfinityFree\AcmeCore\Challenge\ValidatorInterface;
 use InfinityFree\AcmeCore\Challenge\WaitingValidator;
 use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
@@ -43,28 +42,26 @@ class WaitingValidatorTest extends TestCase
     {
         $mockDecorated = $this->prophesize(ValidatorInterface::class);
         $dummyChallenge = $this->prophesize(AuthorizationChallenge::class)->reveal();
-        $solver = $this->prophesize(SolverInterface::class)->reveal();
 
         $validator = new WaitingValidator($mockDecorated->reveal());
 
-        $mockDecorated->supports($dummyChallenge, $solver)->willReturn(true);
-        $this->assertTrue($validator->supports($dummyChallenge, $solver));
+        $mockDecorated->supports($dummyChallenge)->willReturn(true);
+        $this->assertTrue($validator->supports($dummyChallenge));
 
         $mockDecorated->supports($dummyChallenge, $solver)->willReturn(false);
-        $this->assertFalse($validator->supports($dummyChallenge, $solver));
+        $this->assertFalse($validator->supports($dummyChallenge));
     }
 
     public function testIsValid()
     {
         $mockDecorated = $this->prophesize(ValidatorInterface::class);
         $dummyChallenge = $this->prophesize(AuthorizationChallenge::class)->reveal();
-        $solver = $this->prophesize(SolverInterface::class)->reveal();
 
         $validator = new WaitingValidator($mockDecorated->reveal());
 
         $start = time();
-        $mockDecorated->isValid($dummyChallenge, $solver)->willReturn(true);
-        $this->assertTrue($validator->isValid($dummyChallenge, $solver));
+        $mockDecorated->isValid($dummyChallenge)->willReturn(true);
+        $this->assertTrue($validator->isValid($dummyChallenge));
         $this->assertLessThan(1, time() - $start);
     }
 
@@ -72,13 +69,12 @@ class WaitingValidatorTest extends TestCase
     {
         $mockDecorated = $this->prophesize(ValidatorInterface::class);
         $dummyChallenge = $this->prophesize(AuthorizationChallenge::class)->reveal();
-        $solver = $this->prophesize(SolverInterface::class)->reveal();
 
         $validator = new WaitingValidator($mockDecorated->reveal());
 
         $start = time();
-        $mockDecorated->isValid($dummyChallenge, $solver)->willReturn(false);
-        $this->assertFalse($validator->isValid($dummyChallenge, $solver));
+        $mockDecorated->isValid($dummyChallenge)->willReturn(false);
+        $this->assertFalse($validator->isValid($dummyChallenge));
         $this->assertGreaterThanOrEqual(180, time() - $start);
     }
 
@@ -86,13 +82,12 @@ class WaitingValidatorTest extends TestCase
     {
         $mockDecorated = $this->prophesize(ValidatorInterface::class);
         $dummyChallenge = $this->prophesize(AuthorizationChallenge::class)->reveal();
-        $solver = $this->prophesize(SolverInterface::class)->reveal();
 
         $validator = new WaitingValidator($mockDecorated->reveal());
 
         $start = time();
-        $mockDecorated->isValid($dummyChallenge, $solver)->willReturn(false, false, true);
-        $this->assertTrue($validator->isValid($dummyChallenge, $solver));
+        $mockDecorated->isValid($dummyChallenge)->willReturn(false, false, true);
+        $this->assertTrue($validator->isValid($dummyChallenge));
         $this->assertGreaterThanOrEqual(6, time() - $start);
         $this->assertLessThan(9, time() - $start);
     }

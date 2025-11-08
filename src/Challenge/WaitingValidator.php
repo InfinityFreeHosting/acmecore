@@ -36,20 +36,20 @@ class WaitingValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(AuthorizationChallenge $authorizationChallenge, SolverInterface $solver): bool
+    public function supports(AuthorizationChallenge $authorizationChallenge): bool
     {
-        return $this->validator->supports($authorizationChallenge, $solver);
+        return $this->validator->supports($authorizationChallenge);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isValid(AuthorizationChallenge $authorizationChallenge, SolverInterface $solver): bool
+    public function isValid(AuthorizationChallenge $authorizationChallenge): bool
     {
         $limitEndTime = time() + $this->timeout;
 
         do {
-            if ($this->validator->isValid($authorizationChallenge, $solver)) {
+            if ($this->validator->isValid($authorizationChallenge)) {
                 return true;
             }
             sleep(3);

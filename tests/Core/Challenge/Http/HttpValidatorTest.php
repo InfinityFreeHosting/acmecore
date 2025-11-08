@@ -11,12 +11,11 @@
 
 namespace Tests\AcmeCore\Core\Challenge\Http;
 
-use InfinityFree\AcmeCore\Challenge\Http\HttpDataExtractor;
-use InfinityFree\AcmeCore\Challenge\Http\HttpValidator;
-use InfinityFree\AcmeCore\Challenge\SolverInterface;
-use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use InfinityFree\AcmeCore\Challenge\Extractor\HttpDataExtractor;
+use InfinityFree\AcmeCore\Challenge\Http\HttpValidator;
+use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\RequestInterface;
@@ -39,10 +38,10 @@ class HttpValidatorTest extends TestCase
         $validator = new HttpValidator($mockExtractor->reveal(), $mockHttpClient->reveal());
 
         $stubChallenge->getType()->willReturn($typeDns);
-        $this->assertFalse($validator->supports($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
+        $this->assertFalse($validator->supports($stubChallenge->reveal()));
 
         $stubChallenge->getType()->willReturn($typeHttp);
-        $this->assertTrue($validator->supports($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
+        $this->assertTrue($validator->supports($stubChallenge->reveal()));
     }
 
     public function testIsValid()
@@ -65,7 +64,7 @@ class HttpValidatorTest extends TestCase
         $stubResponse->getBody()->willReturn($stubStream->reveal());
         $stubStream->getContents()->willReturn($checkContent);
 
-        $this->assertTrue($validator->isValid($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
+        $this->assertTrue($validator->isValid($stubChallenge->reveal()));
     }
 
     public function testIsValidCatchExceptions()
@@ -91,6 +90,6 @@ class HttpValidatorTest extends TestCase
             $mockResponse->reveal()
         ));
 
-        $this->assertFalse($validator->isValid($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
+        $this->assertFalse($validator->isValid($stubChallenge->reveal()));
     }
 }

@@ -11,10 +11,9 @@
 
 namespace Tests\AcmeCore\Core\Challenge\Dns;
 
-use InfinityFree\AcmeCore\Challenge\Dns\DnsDataExtractor;
 use InfinityFree\AcmeCore\Challenge\Dns\DnsResolverInterface;
 use InfinityFree\AcmeCore\Challenge\Dns\DnsValidator;
-use InfinityFree\AcmeCore\Challenge\SolverInterface;
+use InfinityFree\AcmeCore\Challenge\Extractor\DnsDataExtractor;
 use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -34,10 +33,10 @@ class DnsValidatorTest extends TestCase
         $validator = new DnsValidator($mockExtractor->reveal());
 
         $stubChallenge->getType()->willReturn($typeDns);
-        $this->assertTrue($validator->supports($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
+        $this->assertTrue($validator->supports($stubChallenge->reveal()));
 
         $stubChallenge->getType()->willReturn($typeHttp);
-        $this->assertFalse($validator->supports($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
+        $this->assertFalse($validator->supports($stubChallenge->reveal()));
     }
 
     public function testIsValid()
@@ -55,7 +54,7 @@ class DnsValidatorTest extends TestCase
         $mockExtractor->getRecordName($stubChallenge->reveal())->willReturn($recordName);
         $mockExtractor->getRecordValue($stubChallenge->reveal())->willReturn($recordValue);
 
-        $this->assertTrue($validator->isValid($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
+        $this->assertTrue($validator->isValid($stubChallenge->reveal()));
     }
 
     public function testIsValidCheckRecordValue()
@@ -73,6 +72,6 @@ class DnsValidatorTest extends TestCase
         $mockExtractor->getRecordName($stubChallenge->reveal())->willReturn($recordName);
         $mockExtractor->getRecordValue($stubChallenge->reveal())->willReturn($recordValue);
 
-        $this->assertFalse($validator->isValid($stubChallenge->reveal(), $this->prophesize(SolverInterface::class)->reveal()));
+        $this->assertFalse($validator->isValid($stubChallenge->reveal()));
     }
 }

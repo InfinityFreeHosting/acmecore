@@ -21,16 +21,16 @@ use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 interface ValidatorInterface
 {
     /**
-     * Determines whether or not the validator supports a given Challenge.
+     * Determines whether the validator supports a given Challenge.
      *
      * @return bool The validator supports the given challenge's type
      */
-    public function supports(AuthorizationChallenge $authorizationChallenge, SolverInterface $solver): bool;
+    public function supports(AuthorizationChallenge $authorizationChallenge): bool;
 
     /**
      * Internally validate the challenge by performing the same kind of test than the CA.
      *
      * @return bool The challenge is valid
      */
-    public function isValid(AuthorizationChallenge $authorizationChallenge, SolverInterface $solver): bool;
+    public function isValid(AuthorizationChallenge $authorizationChallenge): bool;
 }

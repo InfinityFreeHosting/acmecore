@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\AcmeCore\Core\Challenge\Dns;
+namespace Tests\AcmeCore\Core\Challenge\Extractor;
 
-use InfinityFree\AcmeCore\Challenge\Dns\DnsDataExtractor;
+use InfinityFree\AcmeCore\Challenge\Extractor\DnsDataExtractor;
 use InfinityFree\AcmeCore\Http\Base64SafeEncoder;
 use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 use PHPUnit\Framework\TestCase;

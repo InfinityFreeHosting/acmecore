@@ -15,9 +15,9 @@ use InfinityFree\AcmeCore\Http\Base64SafeEncoder;
 use InfinityFree\AcmeCore\Http\SecureHttpClient;
 use InfinityFree\AcmeCore\Http\SecureHttpClientFactory;
 use InfinityFree\AcmeCore\Http\ServerErrorHandler;
-use AcmePhp\Ssl\Generator\KeyPairGenerator;
-use AcmePhp\Ssl\Parser\KeyParser;
-use AcmePhp\Ssl\Signer\DataSigner;
+use InfinityFree\AcmeCore\Ssl\Generator\KeyPairGenerator;
+use InfinityFree\AcmeCore\Ssl\Parser\KeyParser;
+use InfinityFree\AcmeCore\Ssl\Signer\DataSigner;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 

@@ -11,11 +11,11 @@
 
 namespace InfinityFree\AcmeCore\Challenge\Http;
 
-use InfinityFree\AcmeCore\Challenge\SolverInterface;
-use InfinityFree\AcmeCore\Challenge\ValidatorInterface;
-use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use InfinityFree\AcmeCore\Challenge\Extractor\HttpDataExtractor;
+use InfinityFree\AcmeCore\Challenge\ValidatorInterface;
+use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 
 /**
  * Validator for HTTP challenges.
@@ -43,15 +43,15 @@ class HttpValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(AuthorizationChallenge $authorizationChallenge, SolverInterface $solver): bool
+    public function supports(AuthorizationChallenge $authorizationChallenge): bool
     {
-        return 'http-01' === $authorizationChallenge->getType() && !$solver instanceof MockServerHttpSolver;
+        return 'http-01' === $authorizationChallenge->getType();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isValid(AuthorizationChallenge $authorizationChallenge, SolverInterface $solver): bool
+    public function isValid(AuthorizationChallenge $authorizationChallenge): bool
     {
         $checkUrl = $this->extractor->getCheckUrl($authorizationChallenge);
         $checkContent = $this->extractor->getCheckContent($authorizationChallenge);

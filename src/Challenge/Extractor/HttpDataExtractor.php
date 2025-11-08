@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace InfinityFree\AcmeCore\Challenge\Http;
+namespace InfinityFree\AcmeCore\Challenge\Extractor;
 
 use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 

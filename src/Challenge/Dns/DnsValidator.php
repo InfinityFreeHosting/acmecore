@@ -11,7 +11,7 @@
 
 namespace InfinityFree\AcmeCore\Challenge\Dns;
 
-use InfinityFree\AcmeCore\Challenge\SolverInterface;
+use InfinityFree\AcmeCore\Challenge\Extractor\DnsDataExtractor;
 use InfinityFree\AcmeCore\Challenge\ValidatorInterface;
 use InfinityFree\AcmeCore\Exception\AcmeDnsResolutionException;
 use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
@@ -36,17 +36,13 @@ class DnsValidator implements ValidatorInterface
     public function __construct(?DnsDataExtractor $extractor = null, ?DnsResolverInterface $dnsResolver = null)
     {
         $this->extractor = $extractor ?: new DnsDataExtractor();
-
-        $this->dnsResolver = $dnsResolver;
-        if (!$this->dnsResolver) {
-            $this->dnsResolver = LibDnsResolver::isSupported() ? new LibDnsResolver() : new SimpleDnsResolver();
-        }
+        $this->dnsResolver = $dnsResolver ?: new SimpleDnsResolver();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(AuthorizationChallenge $authorizationChallenge, SolverInterface $solver): bool
+    public function supports(AuthorizationChallenge $authorizationChallenge): bool
     {
         return 'dns-01' === $authorizationChallenge->getType();
     }
@@ -54,7 +50,7 @@ class DnsValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function isValid(AuthorizationChallenge $authorizationChallenge, SolverInterface $solver): bool
+    public function isValid(AuthorizationChallenge $authorizationChallenge): bool
     {
         $recordName = $this->extractor->getRecordName($authorizationChallenge);
         $recordValue = $this->extractor->getRecordValue($authorizationChallenge);

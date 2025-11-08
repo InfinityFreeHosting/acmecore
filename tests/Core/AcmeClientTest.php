@@ -21,15 +21,15 @@ use InfinityFree\AcmeCore\Http\ServerErrorHandler;
 use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
 use InfinityFree\AcmeCore\Protocol\CertificateOrder;
 use InfinityFree\AcmeCore\Protocol\ExternalAccount;
-use AcmePhp\Ssl\Certificate;
-use AcmePhp\Ssl\CertificateRequest;
-use AcmePhp\Ssl\DistinguishedName;
-use AcmePhp\Ssl\Generator\EcKey\EcKeyOption;
-use AcmePhp\Ssl\Generator\KeyOption;
-use AcmePhp\Ssl\Generator\KeyPairGenerator;
-use AcmePhp\Ssl\Generator\RsaKey\RsaKeyOption;
-use AcmePhp\Ssl\Parser\KeyParser;
-use AcmePhp\Ssl\Signer\DataSigner;
+use InfinityFree\AcmeCore\Ssl\Certificate;
+use InfinityFree\AcmeCore\Ssl\CertificateRequest;
+use InfinityFree\AcmeCore\Ssl\DistinguishedName;
+use InfinityFree\AcmeCore\Ssl\Generator\EcKey\EcKeyOption;
+use InfinityFree\AcmeCore\Ssl\Generator\KeyOption;
+use InfinityFree\AcmeCore\Ssl\Generator\KeyPairGenerator;
+use InfinityFree\AcmeCore\Ssl\Generator\RsaKey\RsaKeyOption;
+use InfinityFree\AcmeCore\Ssl\Parser\KeyParser;
+use InfinityFree\AcmeCore\Ssl\Signer\DataSigner;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 
@@ -72,8 +72,6 @@ class AcmeClientTest extends TestCase
         $this->assertIsArray($data);
         $this->assertArrayHasKey('key', $data);
 
-        $solver = new SimpleHttpSolver();
-
         /*
          * Ask for domain challenge
          */
@@ -91,8 +89,6 @@ class AcmeClientTest extends TestCase
         // Extract host from ACME_DIRECTORY_URL or default to localhost
         $acmeHost = parse_url(getenv('ACME_DIRECTORY_URL') ?: 'https://localhost:14000/dir', PHP_URL_HOST);
         $this->assertStringContainsString('https://' . $acmeHost . ':14000/chalZ/', $challenge->getUrl());
-
-        $solver->solve($challenge);
 
         /*
          * Challenge check

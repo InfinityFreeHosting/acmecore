@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace InfinityFree\AcmeCore\Challenge\Dns;
+namespace InfinityFree\AcmeCore\Challenge\Extractor;
 
 use InfinityFree\AcmeCore\Http\Base64SafeEncoder;
 use InfinityFree\AcmeCore\Protocol\AuthorizationChallenge;
