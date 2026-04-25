@@ -117,7 +117,7 @@ class AuthorizationChallenge
         return $this->token;
     }
 
-    public function getPayload(): string
+    public function getPayload(): ?string
     {
         return $this->payload;
     }
