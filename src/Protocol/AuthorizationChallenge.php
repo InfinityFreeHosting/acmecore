@@ -37,9 +37,12 @@ class AuthorizationChallenge
     private $payload;
 
     /** @var array */
+    private $issuerDomainNames;
+
+    /** @var array */
     private $error;
 
-    public function __construct(string $domain, string $status, string $type, string $url, ?string $token = null, ?string $payload = null, array $error = [])
+    public function __construct(string $domain, string $status, string $type, string $url, ?string $token = null, ?string $payload = null, array $issuerDomainNames = [],array $error = [])
     {
         $this->domain = $domain;
         $this->status = $status;
@@ -47,6 +50,7 @@ class AuthorizationChallenge
         $this->url = $url;
         $this->token = $token;
         $this->payload = $payload;
+        $this->issuerDomainNames = $issuerDomainNames;
         $this->error = $error;
     }
 
@@ -59,6 +63,7 @@ class AuthorizationChallenge
             'url' => $this->getUrl(),
             'token' => $this->getToken(),
             'payload' => $this->getPayload(),
+            'issuer-domain-names' => $this->getIssuerDomainNames(),
             'error' => $this->getError(),
         ];
     }
@@ -70,8 +75,9 @@ class AuthorizationChallenge
             $data['status'],
             $data['type'],
             $data['url'],
-            $data['token'],
-            $data['payload'],
+            $data['token'] ?? null,
+            $data['payload'] ?? null,
+            $data['issuer-domain-names'] ?? [],
             $data['error']
         );
     }
@@ -114,6 +120,11 @@ class AuthorizationChallenge
     public function getPayload(): string
     {
         return $this->payload;
+    }
+
+    public function getIssuerDomainNames(): array
+    {
+        return $this->issuerDomainNames;
     }
 
     public function getError(): array

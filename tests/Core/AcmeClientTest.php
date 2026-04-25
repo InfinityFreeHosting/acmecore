@@ -51,7 +51,7 @@ class AcmeClientTest extends TestCase
     {
         $secureHttpClient = new SecureHttpClient(
             (new KeyPairGenerator())->generateKeyPair($keyOption),
-            new Client(),
+            new Client(['verify' => false]),
             new Base64SafeEncoder(),
             new KeyParser(),
             new DataSigner(),

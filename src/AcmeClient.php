@@ -341,6 +341,7 @@ class AcmeClient implements AcmeClientInterface
             isset($response['token'])
                 ? $response['token'].'.'.$base64encoder->encode($this->getHttpClient()->getJWKThumbprint())
                 : null,
+            $response['issuer-domain-names'] ?? [],
             $response['error'] ?? []
         );
     }
