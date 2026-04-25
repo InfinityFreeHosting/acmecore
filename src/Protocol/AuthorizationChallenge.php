@@ -39,7 +39,7 @@ class AuthorizationChallenge
     /** @var array */
     private $error;
 
-    public function __construct(string $domain, string $status, string $type, string $url, string $token, string $payload, array $error = [])
+    public function __construct(string $domain, string $status, string $type, string $url, ?string $token = null, ?string $payload = null, array $error = [])
     {
         $this->domain = $domain;
         $this->status = $status;
