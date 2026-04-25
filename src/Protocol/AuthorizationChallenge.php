@@ -112,7 +112,7 @@ class AuthorizationChallenge
         return $this->url;
     }
 
-    public function getToken(): string
+    public function getToken(): ?string
     {
         return $this->token;
     }
